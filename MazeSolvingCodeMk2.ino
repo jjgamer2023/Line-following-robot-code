@@ -38,9 +38,9 @@ const int BIN2 = 7;
 const int PWMB = 6;
 int AMotorOffset = 0;     //Offset for Right Motor, self adjusts
 
-byte runSpeed = 125;  //variable called "runSpeed" from 0 to 255 to control PWM duty cycle -> motor speed when driving straight
-byte turnSpeed = 155; //variable called "turnSpeed" from 0 to 255 to control the PWM duty cycle (motor speed) when turning
-int lineWidth = 50;
+byte runSpeed = 155;  //variable called "runSpeed" from 0 to 255 to control PWM duty cycle -> motor speed when driving straight
+byte turnSpeed = 160; //variable called "turnSpeed" from 0 to 255 to control the PWM duty cycle (motor speed) when turning
+int lineWidth = 40;
 byte turnArSpeed = 182; //variable called "turnArSpeed" from 0 to 255 to control the PWM duty cycle (motor speed) when turning around
 
 void setup() {
@@ -62,9 +62,10 @@ void setup() {
 
  // initialize digital pin LED_BUILTIN as an output.
   pinMode(LED_BUILTIN, OUTPUT);
-  
+  readSensors();
   delay(1000);
   enableMotors();
+
 }
 
 void loop() {
@@ -101,13 +102,13 @@ int straight(int PWMvalue, int AMotorOffset) {
     analogWrite(PWMA, PWMvalue+AMotorOffset);
     analogWrite(PWMB, PWMvalue);
   if ( rightNearReading > 200) {                  //if right near is going black, 
-    if (AMotorOffset <10)                         //limit motorA offset to maximum +10
+    if (AMotorOffset <5)                         //limit motorA offset to maximum +10
       AMotorOffset = AMotorOffset + 3;            //increase motorA offset by 2 to adjust for imbalance between motors 
       digitalWrite(BIN1, HIGH);                   //drive only left motor for 2ms, then no drive for 1ms 
       digitalWrite(BIN2, LOW);
       digitalWrite(AIN1, LOW);
       digitalWrite(AIN2, LOW);
-      delay(2);
+      delay(1);
       digitalWrite(BIN1, LOW);
       digitalWrite(BIN2, LOW);
       digitalWrite(AIN1, LOW);
@@ -115,13 +116,13 @@ int straight(int PWMvalue, int AMotorOffset) {
       delay(1);
   }
   else if (leftNearReading > 200) {               //if left near is going black, 
-    if (AMotorOffset > -10)                       //limit motorA offset to minimum -10
+    if (AMotorOffset > -5)                       //limit motorA offset to minimum -10
       AMotorOffset = AMotorOffset - 3;            //decrease motorA offset by 2 to adjust for imbalance between motors  
       digitalWrite(BIN1, LOW);                    //drive only right motor for 2ms, then no drive for 1ms
       digitalWrite(BIN2, LOW);
       digitalWrite(AIN1, HIGH);
       digitalWrite(AIN2, LOW);
-      delay(2);
+      delay(1);
       digitalWrite(BIN1, LOW);
       digitalWrite(BIN2, LOW);
       digitalWrite(AIN1, LOW);
@@ -247,7 +248,17 @@ void leftHandWall(int PWMvalue, int AMotorOffset) {
         done();
       }
       else if (leftFarReading < 200 && rightFarReading < 200) { //if both left and right far sensors are white, then turn left
-        turnLeft(PWMvalue);                                     //makes left turn
+        turnLeft(PWMvalue);
+        digitalWrite(BIN1, HIGH);
+        digitalWrite(BIN2, LOW);
+        digitalWrite(AIN1, HIGH);
+        digitalWrite(AIN2, LOW);
+        delay(1000);
+        digitalWrite(BIN1, LOW);
+        digitalWrite(BIN2, LOW);
+        digitalWrite(AIN1, LOW);
+        digitalWrite(AIN2, LOW);
+        delay(10);                                     //makes left turn
         return;
       }
     }
@@ -321,7 +332,9 @@ void turnLeft(int PWMvalue) {
     digitalWrite(AIN2, LOW);
     delay(10);
     i++;
-  }
+    }
+
+
   
   i=0;
   while ((analogRead(leftCenterSensor) < 100 && analogRead(rightCenterSensor) < 100)&& i<100) {
