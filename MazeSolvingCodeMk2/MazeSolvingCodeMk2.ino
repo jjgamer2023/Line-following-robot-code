@@ -375,7 +375,7 @@ void turnAround(int PWMvalue, int AMotorOffset) {
     digitalWrite(BIN2, HIGH);
     digitalWrite(AIN1, HIGH);
     digitalWrite(AIN2, LOW);
-    delay(10);
+    delay(15);
     digitalWrite(BIN1, LOW);
     digitalWrite(BIN2, LOW);
     digitalWrite(AIN1, LOW);
@@ -400,7 +400,7 @@ void turnAround(int PWMvalue, int AMotorOffset) {
     digitalWrite(BIN2, LOW);
     digitalWrite(AIN1, LOW);
     digitalWrite(AIN2, LOW);
-    delay(30);
+    delay(25);
     i++;
   }
   delay(100);
