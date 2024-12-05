@@ -253,7 +253,7 @@ void leftHandWall(int PWMvalue, int AMotorOffset) {
         digitalWrite(BIN2, LOW);
         digitalWrite(AIN1, HIGH);
         digitalWrite(AIN2, LOW);
-        delay(1000);
+        delay(10);
         digitalWrite(BIN1, LOW);
         digitalWrite(BIN2, LOW);
         digitalWrite(AIN1, LOW);
@@ -307,11 +307,7 @@ void done() {
   }
 }
 
-
-
 void turnLeft(int PWMvalue) {
-  pos = 60;
-  myservo.write(pos);
   //blinkCode(4);
   analogWrite(PWMA, PWMvalue);
   analogWrite(PWMB, PWMvalue);
@@ -332,9 +328,7 @@ void turnLeft(int PWMvalue) {
     digitalWrite(AIN2, LOW);
     delay(10);
     i++;
-    }
-
-
+  }
   
   i=0;
   while ((analogRead(leftCenterSensor) < 100 && analogRead(rightCenterSensor) < 100)&& i<100) {
@@ -358,8 +352,6 @@ void turnLeft(int PWMvalue) {
 } //end of leftTurn
 
 void turnAround(int PWMvalue, int AMotorOffset) {
-  pos = 85;
-  myservo.write(pos);
   //blinkCode(5);
   analogWrite(PWMA, PWMvalue+AMotorOffset);
   analogWrite(PWMB, PWMvalue);
@@ -405,8 +397,6 @@ void turnAround(int PWMvalue, int AMotorOffset) {
 } //end of turnAround
 
 void turnRight(int PWMvalue) {
-  pos = 110;
-  myservo.write(pos);
   //blinkCode(6);
   analogWrite(PWMA, PWMvalue);
   analogWrite(PWMB, PWMvalue);
